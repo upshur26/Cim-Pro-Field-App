@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CIM Pro">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="styles.css">
+<title>CIM Pro Field App</title>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>CIM Pro Field App</h1>
+    <p>Complete field workflows for commissioning, troubleshooting, safety, uptime, and reporting.</p><p class="creatorLine">Created by O. Upshur</p>
+  </div>
+  <button id="installBtn" class="outline hidden">Install</button>
+</header>
+
+<main>
+  <section class="searchBox">
+    <input id="searchInput" type="search" placeholder="Search anything: VFD, null, MOD, alarm, KMC, generator..." autocomplete="off">
+  </section>
+
+  <section id="dashboard" class="grid"></section>
+
+  <section id="content" class="panel hidden">
+    <div class="bar">
+      <button id="backBtn" class="outline">← Back</button>
+      <button id="topBtn" class="outline">Top</button>
+    </div>
+    <div id="contentBody"></div>
+  </section>
+
+  <section id="reportPanel" class="panel hidden">
+    <div class="bar"><button id="reportBackBtn" class="outline">← Back</button><button id="clearReports" class="danger">Clear</button></div>
+    <h2>Field Report Builder</h2>
+    <label>System / Equipment<input id="reportSystem" placeholder="Example: RTU-4 / VFD / MOD-2"></label>
+    <label>Test / Issue<input id="reportTest" placeholder="Example: SCADA command verification"></label>
+    <label>Status<select id="reportStatus"><option>PASS</option><option>FAIL</option><option>OPEN ISSUE</option><option>N/A</option></select></label>
+    <label>Expected Result<textarea id="reportExpected" placeholder="What should have happened?"></textarea></label>
+    <label>Actual Result<textarea id="reportActual" placeholder="What actually happened?"></textarea></label>
+    <label>Checks Completed<textarea id="reportChecks" placeholder="Power, comms, override, mapping, local/remote, etc."></textarea></label>
+    <label>Next Action / Owner<textarea id="reportNext" placeholder="Who needs to do what next?"></textarea></label>
+    <div class="buttonRow"><button id="saveReport">Save Report</button><button id="exportReport" class="secondary">Export / Share</button></div>
+    <h3>Saved Reports</h3>
+    <div id="savedReports"></div>
+  </section>
+</main>
+
+<nav class="bottom">
+  <button data-open="daily_workflow">Daily</button>
+  <button data-open="equipment_index">Equip</button>
+  <button data-open="troubleshooting">Fix</button>
+  <button data-open="pm_wording">Say</button>
+  <button data-open="creator_about">Creator</button>
+  <button data-report="1">Report</button>
+</nav>
+<script src="app.js"></script>
+</body>
+</html>

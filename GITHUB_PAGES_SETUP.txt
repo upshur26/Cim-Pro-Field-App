@@ -1,0 +1,27 @@
+GITHUB PAGES SHAREABLE HOSTING INSTRUCTIONS
+
+This folder is ready for GitHub Pages.
+
+Upload these files into a new PUBLIC GitHub repository:
+- index.html
+- styles.css
+- app.js
+- manifest.json
+- sw.js
+- README.txt
+- ownership.json
+- .nojekyll
+
+Then enable Pages:
+Settings -> Pages -> Deploy from branch -> main -> /root -> Save
+
+Your shareable link will look like:
+https://YOUR-GITHUB-USERNAME.github.io/REPOSITORY-NAME/
+
+Recommended repository name:
+cim-pro-field-app
+
+This version includes:
+- Full CIM Pro Field App V6 content
+- Creator embedded: O. Upshur
+- Shareable public hosting support

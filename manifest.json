@@ -1,0 +1,17 @@
+{
+  "name": "CIM Pro Field App Complete",
+  "short_name": "CIM Pro",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#0f172a",
+  "description": "Complete CIM field commissioning, troubleshooting, safety, uptime, and reporting app created by O. Upshur.",
+  "icons": [],
+  "creator": "O. Upshur",
+  "author": "O. Upshur",
+  "maintainer": "O. Upshur",
+  "role": "CIM Tech Specialist",
+  "version": "6.0",
+  "created_by": "O. Upshur",
+  "creator_embedded_date": "2026-05-03"
+}
