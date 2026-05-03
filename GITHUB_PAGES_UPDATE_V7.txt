@@ -1,0 +1,17 @@
+HOW TO UPDATE YOUR LIVE GITHUB PAGES APP TO V7
+
+1. Unzip this package.
+2. In your GitHub repository, upload/replace these files:
+   - index.html
+   - styles.css
+   - app.js
+   - manifest.json
+   - sw.js
+   - README.txt
+   - ownership.json
+   - .nojekyll
+3. Commit changes.
+4. Your live link stays the same:
+   https://upshur26.github.io/Cim-Pro-Field-App/
+
+This is the next-level V7 package with creator embedded: O. Upshur.

@@ -3,62 +3,130 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#030712">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="CIM Pro">
+<meta name="apple-mobile-web-app-title" content="CIM Pro V11">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="styles.css">
-<title>CIM Pro Field App</title>
+<title>CIM Pro Field App V11</title>
 </head>
 <body>
-<header class="top">
-  <div>
-    <h1>CIM Pro Field App</h1>
-    <p>Complete field workflows for commissioning, troubleshooting, safety, uptime, and reporting.</p><p class="creatorLine">Created by O. Upshur</p>
+<div id="toast" class="toast hidden">Copied</div>
+
+<section id="onboardingOverlay" class="onboardOverlay hidden">
+  <div class="onboardCard">
+    <div class="appLogoMark">
+      <span class="gearIcon">⚙</span>
+      <span class="boltIcon">⚡</span>
+    </div>
+    <h2>CIM Pro V11</h2>
+    <p class="lead">Commission faster. Troubleshoot smarter. Document cleaner.</p>
+    <div class="onboardSteps">
+      <div><b>1</b><span>Troubleshoot</span></div>
+      <div><b>2</b><span>Checklist</span></div>
+      <div><b>3</b><span>Report</span></div>
+    </div>
+    <div class="legendGrid">
+      <div class="legend blue">Info</div>
+      <div class="legend green">Pass</div>
+      <div class="legend amber">Caution</div>
+      <div class="legend red">Stop</div>
+    </div>
+    <button id="startAppBtn">Enter App</button>
   </div>
-  <button id="installBtn" class="outline hidden">Install</button>
+</section>
+
+<header class="hero">
+  <div class="heroTop">
+    <div>
+      <div class="eyebrow">Created by O. Upshur</div>
+      <h1>CIM Pro V11</h1>
+      <p>Interactive field support for commissioning, troubleshooting, job history, and reporting.</p>
+    </div>
+    <button id="installBtn" class="iconBtn hidden">Install</button>
+  </div>
+
+  <section class="quickActions">
+    <button class="qaBlue" data-flow="vfd_scada"><span class="lineIcon">⚙</span><b>VFD Fix</b><small>Guided</small></button>
+    <button class="qaRed" data-flow="alarm_not_showing"><span class="lineIcon">!</span><b>Alarm</b><small>Trace</small></button>
+    <button class="qaGreen" data-open="field_checklists"><span class="lineIcon">✓</span><b>Checklist</b><small>Track</small></button>
+    <button class="qaAmber" data-jobs="1"><span class="lineIcon">⌖</span><b>Job Log</b><small>History</small></button>
+  </section>
 </header>
 
 <main>
-  <section class="searchBox">
-    <input id="searchInput" type="search" placeholder="Search anything: VFD, null, MOD, alarm, KMC, generator..." autocomplete="off">
+  <section class="searchWrap">
+    <input id="searchInput" type="search" placeholder="Search VFD, SCADA, NULL, alarm, KMC..." autocomplete="off">
   </section>
 
-  <section id="dashboard" class="grid"></section>
+  <section class="annotationStrip">
+    <span class="pill blue">Info</span>
+    <span class="pill green">Ready</span>
+    <span class="pill amber">Check</span>
+    <span class="pill red">Stop</span>
+    <span class="pill purple">Train</span>
+  </section>
 
-  <section id="content" class="panel hidden">
-    <div class="bar">
-      <button id="backBtn" class="outline">← Back</button>
-      <button id="topBtn" class="outline">Top</button>
+  <section id="dashboard" class="screen active"></section>
+
+  <section id="flowScreen" class="screen hidden">
+    <div class="navBar"><button id="flowBack" class="secondary">← Back</button><button id="flowRestart" class="secondary">Restart</button></div>
+    <div id="flowBody"></div>
+  </section>
+
+  <section id="content" class="screen hidden">
+    <div class="navBar">
+      <button id="backBtn" class="secondary">← Back</button>
+      <button id="topBtn" class="secondary">Top</button>
     </div>
     <div id="contentBody"></div>
   </section>
 
-  <section id="reportPanel" class="panel hidden">
-    <div class="bar"><button id="reportBackBtn" class="outline">← Back</button><button id="clearReports" class="danger">Clear</button></div>
-    <h2>Field Report Builder</h2>
-    <label>System / Equipment<input id="reportSystem" placeholder="Example: RTU-4 / VFD / MOD-2"></label>
+  <section id="jobPanel" class="screen hidden">
+    <div class="navBar"><button id="jobBackBtn" class="secondary">← Back</button><button id="clearJobs" class="danger">Clear</button></div>
+    <div class="pageTitle amberTitle">
+      <span class="bigIcon">⌖</span>
+      <div><h2>Job History</h2><p>Track open issues, retests, and next actions.</p></div>
+    </div>
+    <label>Job / Area<input id="jobArea" placeholder="Example: DC6 / RTU-4"></label>
+    <label>Equipment<input id="jobEquipment" placeholder="Example: VFD / MOD / SCADA"></label>
+    <label>Task Type<select id="jobType"><option>Troubleshooting</option><option>Commissioning</option><option>Alarm Test</option><option>Startup</option><option>Turnover</option><option>Training</option></select></label>
+    <label>Status<select id="jobStatus"><option>OPEN ISSUE</option><option>PASS</option><option>FAIL</option><option>READY TO RETEST</option><option>CLOSED</option></select></label>
+    <label>Notes<textarea id="jobNotes" placeholder="What happened? What was checked?"></textarea></label>
+    <label>Next Action<textarea id="jobNext" placeholder="Owner and next step"></textarea></label>
+    <div class="buttonRow"><button id="saveJob">Save Job</button><button id="exportJobs" class="secondary">Share</button></div>
+    <h3>Saved Jobs</h3>
+    <div id="savedJobs"></div>
+  </section>
+
+  <section id="reportPanel" class="screen hidden">
+    <div class="navBar"><button id="reportBackBtn" class="secondary">← Back</button><button id="clearReports" class="danger">Clear</button></div>
+    <div class="pageTitle">
+      <span class="bigIcon">▣</span>
+      <div><h2>Field Report</h2><p>Clean status for PMs, engineers, and turnover.</p></div>
+    </div>
+    <label>System / Equipment<input id="reportSystem" placeholder="Example: RTU-4 VFD"></label>
     <label>Test / Issue<input id="reportTest" placeholder="Example: SCADA command verification"></label>
     <label>Status<select id="reportStatus"><option>PASS</option><option>FAIL</option><option>OPEN ISSUE</option><option>N/A</option></select></label>
     <label>Expected Result<textarea id="reportExpected" placeholder="What should have happened?"></textarea></label>
     <label>Actual Result<textarea id="reportActual" placeholder="What actually happened?"></textarea></label>
-    <label>Checks Completed<textarea id="reportChecks" placeholder="Power, comms, override, mapping, local/remote, etc."></textarea></label>
-    <label>Next Action / Owner<textarea id="reportNext" placeholder="Who needs to do what next?"></textarea></label>
-    <div class="buttonRow"><button id="saveReport">Save Report</button><button id="exportReport" class="secondary">Export / Share</button></div>
+    <label>Checks Completed<textarea id="reportChecks" placeholder="Power, comms, override, mapping, safeties..."></textarea></label>
+    <label>Next Action / Owner<textarea id="reportNext" placeholder="Who owns it and what is next?"></textarea></label>
+    <div class="buttonRow"><button id="saveReport">Save Report</button><button id="exportReport" class="secondary">Share</button></div>
     <h3>Saved Reports</h3>
     <div id="savedReports"></div>
   </section>
 </main>
 
-<nav class="bottom">
-  <button data-open="daily_workflow">Daily</button>
-  <button data-open="equipment_index">Equip</button>
-  <button data-open="troubleshooting">Fix</button>
-  <button data-open="pm_wording">Say</button>
-  <button data-open="creator_about">Creator</button>
-  <button data-report="1">Report</button>
+<nav class="tabbar">
+  <button data-home="1"><span>⌂</span><small>Home</small></button>
+  <button data-open="smart_troubleshooting"><span>◇</span><small>Fix</small></button>
+  <button data-open="field_checklists"><span>✓</span><small>List</small></button>
+  <button data-jobs="1"><span>⌖</span><small>Jobs</small></button>
+  <button data-report="1"><span>▣</span><small>Report</small></button>
 </nav>
+
 <script src="app.js"></script>
 </body>
 </html>

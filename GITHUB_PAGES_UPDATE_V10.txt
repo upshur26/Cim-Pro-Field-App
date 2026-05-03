@@ -1,0 +1,10 @@
+HOW TO UPDATE YOUR LIVE GITHUB PAGES APP TO V10
+
+1. Unzip this package.
+2. In your GitHub repository, upload/replace all files from this ZIP.
+3. Commit changes.
+4. Your live link stays:
+   https://upshur26.github.io/Cim-Pro-Field-App/
+
+Creator embedded: O. Upshur
+Version: 10.0

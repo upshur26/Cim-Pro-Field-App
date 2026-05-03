@@ -1,0 +1,11 @@
+HOW TO UPDATE YOUR LIVE GITHUB PAGES APP TO V8
+
+1. Unzip this package.
+2. In your GitHub repository, upload/replace all files from this ZIP:
+   index.html, styles.css, app.js, manifest.json, sw.js, README.txt, ownership.json, .nojekyll
+3. Commit changes.
+4. Your live link stays the same:
+   https://upshur26.github.io/Cim-Pro-Field-App/
+
+Creator embedded: O. Upshur
+Version: 8.0

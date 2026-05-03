@@ -1,17 +1,18 @@
 {
-  "name": "CIM Pro Field App Complete",
-  "short_name": "CIM Pro",
+  "name": "CIM Pro Field App V11",
+  "short_name": "CIM Pro V11",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#07111f",
-  "theme_color": "#0f172a",
-  "description": "Complete CIM field commissioning, troubleshooting, safety, uptime, and reporting app created by O. Upshur.",
+  "background_color": "#030712",
+  "theme_color": "#030712",
+  "description": "Built V11 release of CIM Pro field commissioning, troubleshooting, job history, reports, and training app created by O. Upshur.",
   "icons": [],
   "creator": "O. Upshur",
   "author": "O. Upshur",
   "maintainer": "O. Upshur",
   "role": "CIM Tech Specialist",
-  "version": "6.0",
+  "version": "11.0",
   "created_by": "O. Upshur",
-  "creator_embedded_date": "2026-05-03"
+  "creator_embedded_date": "2026-05-03",
+  "release_date": "2026-05-03"
 }

@@ -1328,14 +1328,500 @@ const APP_DATA = {
         },
         {
           "name": "Version",
-          "action": "Version 6.0, creator embedded update completed on 2026-05-03.",
-          "expected": "Creator ownership appears in app header, Creator screen, app metadata, README, and exported reports.",
+          "action": "Version 7.0, next-level update completed on 2026-05-03.",
+          "expected": "Creator ownership appears in app header, Creator screen, app metadata, README, exported reports, and module ownership stamp.",
           "fail": "If a hosted version only shows the About page, the wrong ZIP/version was uploaded."
+        }
+      ]
+    },
+    "smart_troubleshooting": {
+      "title": "Smart Troubleshooting Mode",
+      "summary": "Guided decision-tree style troubleshooting for common field failures.",
+      "tags": [
+        "smart troubleshooting",
+        "decision tree",
+        "guided",
+        "diagnostics",
+        "field logic"
+      ],
+      "steps": [
+        {
+          "name": "VFD not responding to SCADA",
+          "action": "Start with this path: 1) Is VFD powered? 2) Is it in AUTO/Remote? 3) Is there an active override? 4) Does SCADA command change? 5) Does VFD display show command? 6) Does feedback match? 7) Are safeties/permissives normal?",
+          "expected": "You identify whether the failure is power, local mode, override, SCADA mapping, controller logic, safety/permissive, or the VFD itself.",
+          "fail": "If HAND works but AUTO does not, do not call the VFD bad yet. The likely issue is command source, mapping, override, loop, or logic."
+        },
+        {
+          "name": "Point showing NULL",
+          "action": "Check: 1) Is device online? 2) Is controller powered? 3) Is network patched? 4) Is address correct? 5) Does point exist in controller? 6) Is point mapped into SCADA? 7) Is data type/scaling correct?",
+          "expected": "SCADA receives live valid data from the controller/device.",
+          "fail": "NULL usually means SCADA does not have a valid live value. It does not automatically mean the equipment is off."
+        },
+        {
+          "name": "Alarm not showing in SCADA",
+          "action": "Check: 1) Did the condition actually occur? 2) Did controller input change? 3) Is alarm logic enabled? 4) Is alarm mapped? 5) Is alarm suppressed? 6) Is it in history but not active? 7) Is notification routing configured?",
+          "expected": "Alarm appears on active alarm page, equipment graphic, and alarm history with correct name/time/priority.",
+          "fail": "If the controller sees the input but SCADA does not alarm, the problem is likely mapping, logic enablement, alarm class, or routing."
+        },
+        {
+          "name": "Unit will not start",
+          "action": "Check: 1) Power available? 2) Control power? 3) Faults? 4) Safeties? 5) Local/remote mode? 6) Start command present? 7) Permissives satisfied? 8) Output relay/VFD/starter responding?",
+          "expected": "You determine whether the stop point is command, logic, safety, output, or equipment.",
+          "fail": "Never bypass safeties just to prove a point. Identify the blocking condition."
+        },
+        {
+          "name": "Airflow will not change",
+          "action": "Check: 1) Is upstream fan running? 2) Is static pressure available? 3) Is VFD modulating? 4) Are dampers open? 5) Is actuator moving? 6) Is K-factor/sensor tubing correct? 7) Are overrides active?",
+          "expected": "Airflow changes when command/demand changes.",
+          "fail": "If airflow does not change, the issue may be upstream static pressure, actuator/damper, sensor, or override \u2014 not just the VAV."
+        }
+      ]
+    },
+    "field_checklists": {
+      "title": "Real Field Checklists",
+      "summary": "Pass/Fail/N/A checklists for common commissioning tasks.",
+      "tags": [
+        "checklist",
+        "field checklist",
+        "pass fail",
+        "commissioning checklist"
+      ],
+      "steps": [
+        {
+          "name": "VFD Commissioning Checklist",
+          "action": "Verify power, no active fault, HAND operation, AUTO operation, SCADA command, feedback, current, airflow/static response, alarm/fault mapping, and return to auto.",
+          "expected": "VFD responds locally and remotely, feedback matches, alarms report correctly, and no overrides are left active.",
+          "fail": "Record which step failed: power, hand, auto, command, feedback, alarm, or control loop."
+        },
+        {
+          "name": "SCADA/BMS Point Checklist",
+          "action": "Verify point name, equipment tag, live value, scaling, command ability, feedback, alarm limit, trend, history, and graphic display.",
+          "expected": "Point is accurate, live, controllable if intended, trending, and alarming correctly.",
+          "fail": "If point exists but does not update, check controller value, mapping, data type, and database."
+        },
+        {
+          "name": "Alarm Test Checklist",
+          "action": "Confirm alarm exists, trigger condition, verify controller response, verify SCADA active alarm, verify history, verify notification, clear condition, reset alarm, document result.",
+          "expected": "Alarm path works from field to controller to SCADA/history and resets correctly.",
+          "fail": "Do not mark pass if only local alarm works but SCADA/history does not."
+        },
+        {
+          "name": "Startup Checklist",
+          "action": "Confirm authorization, LOTO status, PPE, power, safeties normal, field inspection, start command, feedback, stable operation, no alarms, return to auto.",
+          "expected": "Equipment starts safely and stabilizes.",
+          "fail": "If startup fails, document blocking condition and stop point."
+        },
+        {
+          "name": "Turnover Checklist",
+          "action": "Confirm PFC complete, point-to-point complete, functional test complete, integrated test complete, alarms verified, trends captured, reports saved, open issues assigned.",
+          "expected": "System is ready for operations acceptance.",
+          "fail": "Do not turn over if critical alarms, safeties, comms, or documentation are incomplete."
+        }
+      ]
+    },
+    "pm_explain_button": {
+      "title": "Explain It for PM / Engineer",
+      "summary": "Copy-ready language for common field situations.",
+      "tags": [
+        "pm wording",
+        "engineer wording",
+        "copy",
+        "explain",
+        "communication"
+      ],
+      "steps": [
+        {
+          "name": "Device not responding to SCADA",
+          "action": "Copy this: The equipment appears capable of operating locally, but it is not responding correctly through SCADA/BMS. The next checks should focus on command source, active overrides, point mapping, controller logic, communication, and permissives.",
+          "expected": "Clear message that separates local equipment function from remote controls/integration issue.",
+          "fail": "Do not simply say the device is broken unless local operation also fails."
+        },
+        {
+          "name": "Alarm not showing",
+          "action": "Copy this: The alarm condition was created at the field/controller level, but it is not displaying correctly in SCADA. This points toward alarm mapping, logic enablement, alarm routing, or database configuration needing review.",
+          "expected": "PM/engineer understands this is likely a controls/integration issue.",
+          "fail": "Do not mark the test complete until SCADA visibility/history/reset are verified."
+        },
+        {
+          "name": "VFD stuck or limited",
+          "action": "Copy this: The VFD/fan response appears limited under automatic control. Before calling it a VFD failure, we need to verify auto/remote mode, command source, active overrides, static pressure input, min/max limits, safeties, and feedback mapping.",
+          "expected": "Keeps troubleshooting disciplined and avoids blaming the wrong component.",
+          "fail": "Do not keep changing setpoints randomly without documenting baseline."
+        },
+        {
+          "name": "Point showing null",
+          "action": "Copy this: The point is showing null, meaning SCADA is not receiving a valid live value. The next checks are device communication, controller status, point mapping, data type/scaling, and whether the point has been commissioned into the database.",
+          "expected": "Explains null in simple terms.",
+          "fail": "Null is not proof the field device is dead."
+        },
+        {
+          "name": "Open issue handoff",
+          "action": "Copy this: Current status: field condition verified, screen response checked, and issue appears to require controls/engineering review. Recommended next action is to verify mapping, logic, communication path, and final sequence against the SOO.",
+          "expected": "Professional escalation without sounding lost.",
+          "fail": "Always state what you verified first."
+        }
+      ]
+    },
+    "training_mode": {
+      "title": "Training Mode for New Techs",
+      "summary": "Plain-language lessons and scenarios to help present and future techs learn faster.",
+      "tags": [
+        "training",
+        "new tech",
+        "future techs",
+        "learning",
+        "guide"
+      ],
+      "steps": [
+        {
+          "name": "Lesson: Command vs Feedback",
+          "action": "Command is what the system is asking equipment to do. Feedback is what the equipment says it is actually doing. Always compare both.",
+          "expected": "Techs understand why SCADA command alone does not prove equipment moved or ran.",
+          "fail": "If command changes but feedback does not, investigate field response, wiring, logic, mapping, or device fault."
+        },
+        {
+          "name": "Lesson: Local vs Remote Control",
+          "action": "Local/HAND proves the equipment can run at the device. Remote/AUTO proves the control system can command it. These are different tests.",
+          "expected": "Techs stop assuming a working local test means SCADA is good.",
+          "fail": "If local works but remote fails, focus on controls path."
+        },
+        {
+          "name": "Lesson: Why alarms matter",
+          "action": "An alarm is only useful if it detects the condition, displays correctly, logs history, notifies the right people, and resets properly.",
+          "expected": "Techs understand alarm testing is not just making a light flash.",
+          "fail": "If the alarm does not reach SCADA/history, it is not fully commissioned."
+        },
+        {
+          "name": "Scenario: VAV airflow low",
+          "action": "Ask: Is upstream RTU/VFD supplying pressure? Is damper opening? Is actuator moving? Is airflow sensor tubing correct? Is K-factor correct? Are overrides active?",
+          "expected": "Techs follow a logical path instead of guessing.",
+          "fail": "Do not adjust K-factor to hide upstream or mechanical problems."
+        },
+        {
+          "name": "Scenario: Generator starts but transfer fails",
+          "action": "Ask: Did ATS receive utility loss? Did generator reach acceptable voltage/frequency? Are time delays/permissives satisfied? Is ATS in correct mode? Are alarms active?",
+          "expected": "Techs understand generator start and load transfer are related but separate events.",
+          "fail": "Do not say generator failed if it started and stabilized but ATS did not transfer."
+        }
+      ]
+    },
+    "issue_tracker": {
+      "title": "Issue Tracking",
+      "summary": "Lightweight field issue tracker format for failed tests, open items, and owner handoff.",
+      "tags": [
+        "issue tracking",
+        "open issue",
+        "owner",
+        "handoff",
+        "deficiency"
+      ],
+      "steps": [
+        {
+          "name": "Create issue",
+          "action": "Record equipment, issue, date/time, system affected, expected result, actual result, severity, and owner.",
+          "expected": "Issue is clear enough for someone else to act on.",
+          "fail": "Avoid vague issues like 'not working'. State what failed."
+        },
+        {
+          "name": "Assign owner",
+          "action": "Identify likely owner: electrical, mechanical, controls, vendor, commissioning agent, engineer, or PM.",
+          "expected": "Issue goes to the right person/team.",
+          "fail": "If ownership is unclear, state 'owner TBD' and request assignment."
+        },
+        {
+          "name": "Track status",
+          "action": "Use statuses: OPEN, IN REVIEW, WAITING ON VENDOR, READY TO RETEST, PASSED, CLOSED.",
+          "expected": "Everyone knows whether the issue is fixed or still blocking turnover.",
+          "fail": "Never close an issue without retest evidence."
+        },
+        {
+          "name": "Retest",
+          "action": "After correction, repeat the failed step and verify expected result, feedback, alarm/history, and reset where applicable.",
+          "expected": "Issue is closed based on evidence, not assumption.",
+          "fail": "If fix changes one thing but creates another issue, open a new issue or keep existing one open."
+        }
+      ]
+    },
+    "version_history": {
+      "title": "Version History / Change Log",
+      "summary": "Tracks app growth and ownership over time.",
+      "tags": [
+        "version",
+        "change log",
+        "history",
+        "creator"
+      ],
+      "steps": [
+        {
+          "name": "Version 11.0 \u2014 Built Release",
+          "action": "Clean V11 release built on 2026-05-03. Retains V10 App Store polish, onboarding, animations, saved job history, guided troubleshooting, checklists, reports, training, color annotations, and creator ownership.",
+          "expected": "Creator remains embedded as O. Upshur.",
+          "fail": "If live app still shows an older version, upload all V11 files to GitHub Pages and refresh."
+        },
+        {
+          "name": "Version 11.0 \u2014 App Store polish pass",
+          "action": "Added cleaner visuals, more consistent icons, reduced on-screen reading, smoother transitions, small UI details, premium polish, and retained onboarding/job history on 2026-05-03.",
+          "expected": "Creator remains embedded as O. Upshur.",
+          "fail": "If live site still shows V9, upload V10 files and refresh the page."
+        },
+        {
+          "name": "Version 9.0 \u2014 Polished App Store-style upgrade",
+          "action": "Added onboarding, saved job history, annotation/color guide, stronger visual hierarchy, color-coded cards, status colors, premium UI polish, and retained all prior content on 2026-05-03.",
+          "expected": "Creator remains embedded as O. Upshur.",
+          "fail": "If live site still shows V8, upload V9 files and refresh/clear browser cache."
+        },
+        {
+          "name": "Version 8.0 \u2014 Apple-style interactive upgrade",
+          "action": "Added interactive guided troubleshooting flows, Apple-style quick actions, cleaner UI, task-based navigation, checklist progress behavior, better report layout, copy-ready PM messages, and retained all prior content on 2026-05-03.",
+          "expected": "Creator remains embedded as O. Upshur.",
+          "fail": "If live site still looks like V7, upload the V8 files and clear browser cache."
+        },
+        {
+          "name": "Version 7.0",
+          "action": "Added next-level features on 2026-05-03: Smart Troubleshooting, Field Checklists, PM Explain language, Training Mode, Issue Tracking, creator ownership retained.",
+          "expected": "Creator remains embedded as O. Upshur.",
+          "fail": "If an older version is hosted, upload this version's files to GitHub Pages."
+        },
+        {
+          "name": "Version 7.0",
+          "action": "Full complete V4 content with creator ownership embedded.",
+          "expected": "Complete field app plus creator metadata.",
+          "fail": "Avoid using the stripped creator-only build."
+        },
+        {
+          "name": "Future upgrade ideas",
+          "action": "Add PDF export, cloud sync, login, QR equipment tags, photo attachment, real database, and company branding.",
+          "expected": "App can grow into a professional training/commissioning platform.",
+          "fail": "Do not add features that make field use slower or confusing."
+        }
+      ]
+    },
+    "interactive_quick_start": {
+      "title": "Interactive Quick Start",
+      "summary": "Task-based home screen for faster field use: troubleshoot, checklist, report, training, PM wording.",
+      "tags": [
+        "interactive",
+        "quick actions",
+        "apple style",
+        "v8"
+      ],
+      "steps": [
+        {
+          "name": "Pick the task first",
+          "action": "Start by choosing what you are doing: Troubleshoot, Run Checklist, Create Report, Explain to PM, or Training Mode.",
+          "expected": "The app feels like a tool, not a manual.",
+          "fail": "If you are scrolling too much, use search or quick actions."
+        },
+        {
+          "name": "Use guided flows",
+          "action": "For common problems, answer Yes/No questions and let the app guide the next step.",
+          "expected": "You isolate the issue faster with less guessing.",
+          "fail": "If a flow does not fit your site, use the closest path and document where it differs."
+        },
+        {
+          "name": "Capture result",
+          "action": "After a test or troubleshooting flow, create a report with expected result, actual result, checks completed, and next action.",
+          "expected": "Your work becomes defensible and useful to PMs/engineers.",
+          "fail": "Do not rely on memory after a long shift."
+        }
+      ]
+    },
+    "onboarding": {
+      "title": "Onboarding: How to Use CIM Pro",
+      "summary": "A fast first-time guide so new users know exactly how to use the app.",
+      "tags": [
+        "onboarding",
+        "first use",
+        "guide",
+        "v9"
+      ],
+      "steps": [
+        {
+          "name": "Choose your task",
+          "action": "Start with one of the four main actions: Troubleshoot, Run Checklist, Create Report, or Training Mode.",
+          "expected": "The user knows where to begin in under 10 seconds.",
+          "fail": "If the user has to search around, use the quick-action buttons first."
+        },
+        {
+          "name": "Use color cues",
+          "action": "Blue means information/workflow, green means pass/ready, amber means caution/check, red means fail/stop, purple means training/learning.",
+          "expected": "The app is easier to scan quickly in the field.",
+          "fail": "If a step is red or marked fail, document it and assign next action."
+        },
+        {
+          "name": "Follow guided flows",
+          "action": "For common problems, use Yes/No troubleshooting flows instead of guessing.",
+          "expected": "The app guides the next best step.",
+          "fail": "If the guided flow does not match the site condition, document the difference and use site MOP/SOO."
+        },
+        {
+          "name": "Save job history",
+          "action": "Create a Job Log entry for each job/test area and attach reports/issues to it in your notes.",
+          "expected": "You build a history of what was tested and what remains open.",
+          "fail": "If job history is not saved, important field decisions can get lost."
+        }
+      ]
+    },
+    "job_history": {
+      "title": "Saved Job History",
+      "summary": "Track jobs, systems, open issues, status, and next actions over time.",
+      "tags": [
+        "job history",
+        "saved jobs",
+        "tracking",
+        "status",
+        "issues"
+      ],
+      "steps": [
+        {
+          "name": "Create a job entry",
+          "action": "Enter site/area, equipment, date, task type, status, and notes in the Job Log screen.",
+          "expected": "Each test or troubleshooting event has a clean record.",
+          "fail": "Do not rely only on memory or text messages."
+        },
+        {
+          "name": "Use status colors",
+          "action": "Use PASS for complete, OPEN ISSUE for unresolved, FAIL for failed test, and N/A when not applicable.",
+          "expected": "Status can be understood at a glance.",
+          "fail": "If everything is left as notes only, issues are harder to track."
+        },
+        {
+          "name": "Review history before retest",
+          "action": "Before retesting, review the previous actual result, checks completed, and next action.",
+          "expected": "Retesting is focused and efficient.",
+          "fail": "Without history, you may repeat the same checks without progress."
+        }
+      ]
+    },
+    "annotation_guide": {
+      "title": "Annotations and Color Guide",
+      "summary": "Visual notes that explain what colors, badges, and field callouts mean.",
+      "tags": [
+        "annotations",
+        "colors",
+        "legend",
+        "visual guide"
+      ],
+      "steps": [
+        {
+          "name": "Blue annotation",
+          "action": "Blue callouts are general guidance, tips, or workflow notes.",
+          "expected": "Use blue notes to understand context quickly.",
+          "fail": "Do not treat blue notes as site-specific authorization."
+        },
+        {
+          "name": "Green annotation",
+          "action": "Green means normal, pass, ready, verified, or safe to proceed when authorized.",
+          "expected": "Green status supports completion or next step.",
+          "fail": "Still verify actual field condition before assuming ready."
+        },
+        {
+          "name": "Amber annotation",
+          "action": "Amber means caution, verify before proceeding, or possible issue.",
+          "expected": "Amber items get checked before moving forward.",
+          "fail": "Ignoring amber items can lead to failed tests or unsafe assumptions."
+        },
+        {
+          "name": "Red annotation",
+          "action": "Red means failed, stop, unsafe, active issue, or escalation needed.",
+          "expected": "Red items require documentation and corrective action.",
+          "fail": "Do not continue risky testing after a red condition without authorization."
+        },
+        {
+          "name": "Purple annotation",
+          "action": "Purple marks training, learning, or explanation sections.",
+          "expected": "New techs can identify learning sections quickly.",
+          "fail": "Training guidance still must be confirmed against site procedures."
+        }
+      ]
+    },
+    "appstore_ready_notes": {
+      "title": "App Store Ready Notes",
+      "summary": "Final polish checklist for a professional product feel.",
+      "tags": [
+        "app store",
+        "polish",
+        "animations",
+        "visuals",
+        "v10"
+      ],
+      "steps": [
+        {
+          "name": "Fast first impression",
+          "action": "Open with clear onboarding, quick actions, and visual status colors.",
+          "expected": "User understands the app in seconds.",
+          "fail": "If users must read too much before using it, simplify the screen."
+        },
+        {
+          "name": "Premium feel",
+          "action": "Use smoother transitions, card animations, status colors, icons, and clean spacing.",
+          "expected": "The app feels intentional, modern, and field-ready.",
+          "fail": "Avoid clutter, tiny text, and walls of information."
+        },
+        {
+          "name": "Task-driven workflow",
+          "action": "Guide users into Troubleshoot, Checklist, Job Log, Training, or Report.",
+          "expected": "The app feels interactive instead of like a manual.",
+          "fail": "If a workflow is too long, break it into smaller guided steps."
+        }
+      ]
+    },
+    "v11_release_notes": {
+      "title": "V11 Release Notes",
+      "summary": "Clean release build for sharing, GitHub Pages, and iOS wrapping.",
+      "tags": [
+        "v11",
+        "release",
+        "app store ready",
+        "ios"
+      ],
+      "steps": [
+        {
+          "name": "What V11 includes",
+          "action": "Onboarding, saved job history, cleaner icons/visuals, reduced visible text density, animations, transitions, button feedback, guided troubleshooting, reports, training, issue tracking, and color annotations.",
+          "expected": "V11 is the cleanest current build and should be used as the source version going forward.",
+          "fail": "Do not upload older ZIP files or creator-only builds."
+        },
+        {
+          "name": "Best upload method",
+          "action": "Unzip V11 first, then upload the files inside to GitHub: index.html, app.js, styles.css, manifest.json, sw.js, README.txt, ownership.json, and .nojekyll.",
+          "expected": "GitHub Pages reads index.html and updates the live app.",
+          "fail": "Uploading the ZIP itself will not update the live website."
+        },
+        {
+          "name": "iOS wrapping note",
+          "action": "Use this V11 package as the web source for Capacitor/Xcode or a WebView wrapper.",
+          "expected": "This is the version to hand to your daughter/developer for iOS packaging.",
+          "fail": "Do not package older versions if you want the App Store-ready look."
         }
       ]
     }
   },
   "home": [
+    [
+      "interactive_quick_start",
+      "Quick Start"
+    ],
+    [
+      "v11_release_notes",
+      "V11 Notes"
+    ],
+    [
+      "appstore_ready_notes",
+      "App Store"
+    ],
+    [
+      "annotation_guide",
+      "Color Guide"
+    ],
+    [
+      "job_history",
+      "Job History"
+    ],
+    [
+      "onboarding",
+      "Onboarding"
+    ],
     [
       "start_here",
       "Start Here"
@@ -1383,6 +1869,30 @@ const APP_DATA = {
     [
       "creator_about",
       "Creator"
+    ],
+    [
+      "smart_troubleshooting",
+      "Smart Fix"
+    ],
+    [
+      "field_checklists",
+      "Checklists"
+    ],
+    [
+      "pm_explain_button",
+      "PM Explain"
+    ],
+    [
+      "training_mode",
+      "Training"
+    ],
+    [
+      "issue_tracker",
+      "Issues"
+    ],
+    [
+      "version_history",
+      "Versions"
     ]
   ],
   "equipmentKeys": [
@@ -1400,92 +1910,444 @@ const APP_DATA = {
     "ups",
     "kmc_connect",
     "data_center_equipment_facts"
-  ]
+  ],
+  "interactive_flows": {
+    "vfd_scada": {
+      "title": "VFD Not Responding to SCADA",
+      "icon": "\u2699\ufe0f",
+      "start": "q1",
+      "nodes": {
+        "q1": {
+          "type": "question",
+          "text": "Is the VFD powered with no active fault?",
+          "yes": "q2",
+          "no": "a1"
+        },
+        "a1": {
+          "type": "answer",
+          "text": "Restore/verify power and clear the fault using approved procedure. Do not continue remote-control testing until VFD is ready."
+        },
+        "q2": {
+          "type": "question",
+          "text": "Does the VFD run in HAND/local mode when authorized?",
+          "yes": "q3",
+          "no": "a2"
+        },
+        "a2": {
+          "type": "answer",
+          "text": "Local operation failed. Check motor wiring, safeties, disconnect, VFD fault history, starter/motor condition, and mechanical load before blaming SCADA."
+        },
+        "q3": {
+          "type": "question",
+          "text": "Is the VFD in AUTO/Remote mode?",
+          "yes": "q4",
+          "no": "a3"
+        },
+        "a3": {
+          "type": "answer",
+          "text": "Return VFD to AUTO/Remote. SCADA cannot control it properly if it is held in HAND/Local."
+        },
+        "q4": {
+          "type": "question",
+          "text": "Are any overrides active in SCADA/BMS/controller?",
+          "yes": "a4",
+          "no": "q5"
+        },
+        "a4": {
+          "type": "answer",
+          "text": "Remove/clear authorized overrides and verify automatic control resumes. Document who placed the override and why."
+        },
+        "q5": {
+          "type": "question",
+          "text": "Does the SCADA command value change when you adjust demand/setpoint?",
+          "yes": "q6",
+          "no": "a5"
+        },
+        "a5": {
+          "type": "answer",
+          "text": "SCADA command is not changing. Check graphic point, command mapping, disabled loop, permissions, or missing controller logic."
+        },
+        "q6": {
+          "type": "question",
+          "text": "Does VFD feedback follow the command?",
+          "yes": "a6",
+          "no": "a7"
+        },
+        "a6": {
+          "type": "answer",
+          "text": "Remote control appears functional. Verify airflow/static response, alarms, trends, and return all points to normal automatic control."
+        },
+        "a7": {
+          "type": "answer",
+          "text": "Command changes but feedback does not. Check command source parameter, BACnet/Modbus mapping, safeties/permissives, min/max limits, or feedback point mapping."
+        }
+      }
+    },
+    "alarm_not_showing": {
+      "title": "Alarm Not Showing in SCADA",
+      "icon": "\ud83d\udea8",
+      "start": "q1",
+      "nodes": {
+        "q1": {
+          "type": "question",
+          "text": "Did the alarm condition actually occur at the field device/controller?",
+          "yes": "q2",
+          "no": "a1"
+        },
+        "a1": {
+          "type": "answer",
+          "text": "Trigger the correct alarm condition using the approved method. Confirm you are testing the correct point and equipment."
+        },
+        "q2": {
+          "type": "question",
+          "text": "Did the controller input/status change?",
+          "yes": "q3",
+          "no": "a2"
+        },
+        "a2": {
+          "type": "answer",
+          "text": "Field condition did not reach controller. Check wiring, contact type, sensor, jumper method, input address, or controller power."
+        },
+        "q3": {
+          "type": "question",
+          "text": "Does the alarm point exist and is alarm logic enabled?",
+          "yes": "q4",
+          "no": "a3"
+        },
+        "a3": {
+          "type": "answer",
+          "text": "Alarm logic/point is missing or disabled. Controls/engineering must enable or program the alarm before this test can pass."
+        },
+        "q4": {
+          "type": "question",
+          "text": "Does the alarm appear in SCADA active alarms or history?",
+          "yes": "a4",
+          "no": "a5"
+        },
+        "a4": {
+          "type": "answer",
+          "text": "Alarm path is proving out. Verify priority, timestamp, reset, notification, and documentation before marking pass."
+        },
+        "a5": {
+          "type": "answer",
+          "text": "Controller sees it but SCADA does not. Likely mapping, alarm class, routing, database, or notification configuration issue."
+        }
+      }
+    },
+    "point_null": {
+      "title": "Point Showing NULL",
+      "icon": "\u2205",
+      "start": "q1",
+      "nodes": {
+        "q1": {
+          "type": "question",
+          "text": "Is the device/controller online?",
+          "yes": "q2",
+          "no": "a1"
+        },
+        "a1": {
+          "type": "answer",
+          "text": "Check power, network patching, switch/link lights, address, and controller status first."
+        },
+        "q2": {
+          "type": "question",
+          "text": "Does the value exist and update at the local controller/software?",
+          "yes": "q3",
+          "no": "a2"
+        },
+        "a2": {
+          "type": "answer",
+          "text": "The controller does not have a valid value. Check sensor wiring, program, point address, data type, and scaling."
+        },
+        "q3": {
+          "type": "question",
+          "text": "Is the point mapped into SCADA/BMS with correct data type/scaling?",
+          "yes": "a3",
+          "no": "a4"
+        },
+        "a3": {
+          "type": "answer",
+          "text": "If it is mapped and still null, check integration service, database, permissions, stale data, or gateway issue."
+        },
+        "a4": {
+          "type": "answer",
+          "text": "Point mapping/database is incomplete. Controls/integration needs to map the live controller value into SCADA."
+        }
+      }
+    },
+    "unit_not_starting": {
+      "title": "Unit Will Not Start",
+      "icon": "\u25b6\ufe0f",
+      "start": "q1",
+      "nodes": {
+        "q1": {
+          "type": "question",
+          "text": "Is power/control power available?",
+          "yes": "q2",
+          "no": "a1"
+        },
+        "a1": {
+          "type": "answer",
+          "text": "Verify breaker, disconnect, fuses, transformer/control power, and authorized energization state."
+        },
+        "q2": {
+          "type": "question",
+          "text": "Are any safeties/faults active?",
+          "yes": "a2",
+          "no": "q3"
+        },
+        "a2": {
+          "type": "answer",
+          "text": "Identify and correct the active safety/fault. Do not bypass safeties without approved procedure."
+        },
+        "q3": {
+          "type": "question",
+          "text": "Is a start command present from SCADA/controller?",
+          "yes": "q4",
+          "no": "a3"
+        },
+        "a3": {
+          "type": "answer",
+          "text": "No start command. Check schedule, mode, setpoint demand, permissives, disabled loop, or mapping."
+        },
+        "q4": {
+          "type": "question",
+          "text": "Does the output relay/VFD/starter respond?",
+          "yes": "a4",
+          "no": "a5"
+        },
+        "a4": {
+          "type": "answer",
+          "text": "Output path responds. Check proof/status feedback, airflow/current, and stable operation."
+        },
+        "a5": {
+          "type": "answer",
+          "text": "Command exists but output path fails. Check relay/module, wiring, interlock, starter/VFD, or local mode."
+        }
+      }
+    }
+  }
 };
 
 const modules = APP_DATA.modules;
+const flows = APP_DATA.interactive_flows || {};
 const dashboard = document.getElementById("dashboard");
 const content = document.getElementById("content");
 const contentBody = document.getElementById("contentBody");
+const flowScreen = document.getElementById("flowScreen");
+const flowBody = document.getElementById("flowBody");
 const reportPanel = document.getElementById("reportPanel");
+const jobPanel = document.getElementById("jobPanel");
 const searchInput = document.getElementById("searchInput");
+const toast = document.getElementById("toast");
+const onboardingOverlay = document.getElementById("onboardingOverlay");
+let currentFlow = null;
+let currentNode = null;
 let deferredPrompt;
 
-function card(key,label){
-  const m=modules[key];
-  const b=document.createElement("button");
-  b.className="card";
-  b.innerHTML=`<h3>${label||m.title}</h3><p>${m.summary}</p>`;
-  b.onclick=()=>openModule(key);
-  return b;
+const icons = {
+  onboarding:"▶", appstore_ready_notes:"★", job_history:"⌖", annotation_guide:"◐",
+  start_here:"▶", interactive_quick_start:"◆", daily_workflow:"◷", construction_to_turnover:"▥",
+  cim_job_duties:"◫", safety_uptime:"◎", equipment_index:"▦", troubleshooting:"◇",
+  smart_troubleshooting:"◇", field_checklists:"✓", startup_shutdown:"⏯",
+  alarm_trip_testing:"!", pm_wording:"✎", pm_explain_button:"✦", training_mode:"◈",
+  issue_tracker:"⌖", reports:"▣", version_history:"◷", creator_about:"◉",
+  vfd:"⚙", vav:"≈", rtu:"▤", crac_crah:"❄", scada_bms:"▣", epms:"⚡",
+  plc_allen_bradley:"◇", mod_cod:"⌁", switchgear:"▨", generator:"⚡", transformer:"◌",
+  ups:"▣", kmc_connect:"▢", data_center_equipment_facts:"?"
+};
+
+function cardClass(key) {
+  if(key.includes("safety") || key.includes("check") || key==="field_checklists") return "statusGreen";
+  if(key.includes("alarm") || key.includes("troubleshoot") || key==="smart_troubleshooting") return "statusRed";
+  if(key.includes("job") || key.includes("issue") || key.includes("startup")) return "statusAmber";
+  if(key.includes("training") || key.includes("annotation")) return "statusPurple";
+  return "";
 }
 
-function renderDashboard(filter=""){
-  dashboard.innerHTML="";
-  const q=filter.trim().toLowerCase();
-  let keys = q ? Object.keys(modules).filter(k=>{
-    const m=modules[k];
-    const hay=[m.title,m.summary,...(m.tags||[]),...m.steps.flatMap(s=>[s.name,s.action,s.expected,s.fail])].join(" ").toLowerCase();
-    return hay.includes(q);
-  }) : APP_DATA.home.map(x=>x[0]);
-  keys.forEach(k=>{
-    const label = q ? modules[k].title : (APP_DATA.home.find(x=>x[0]===k)||[])[1];
-    dashboard.appendChild(card(k,label));
-  });
-  if(!keys.length){
-    dashboard.innerHTML='<p>No exact match. Try terms like VFD, alarm, null, SCADA, MOD, KMC, generator, override.</p>';
-  }
+function showToast(msg="Done") {
+  toast.textContent = msg;
+  toast.classList.remove("hidden");
+  setTimeout(()=>toast.classList.add("hidden"), 1400);
 }
 
-function openModule(key){
-  const m=modules[key]; if(!m)return;
-  dashboard.classList.add("hidden"); reportPanel.classList.add("hidden"); content.classList.remove("hidden");
-  let extra="";
-  if(key==="equipment_index"){
-    extra = `<div class="grid mini">${APP_DATA.equipmentKeys.map(k=>`<button class="card" onclick="openModule('${k}')"><h3>${modules[k].title}</h3><p>${modules[k].summary}</p></button>`).join("")}</div>`;
-  }
-  contentBody.innerHTML=`
-    <h2>${m.title}</h2>
-    <p>${m.summary}</p>\n    <div class="ownerStamp"><strong>Created by O. Upshur</strong><br>CIM Tech Specialist • Version 6.0</div>\n    <div>${(m.tags||[]).map(t=>`<span class="badge">${t}</span>`).join("")}</div>
-    ${extra}
-    ${m.steps.map((s,i)=>`
-      <article class="step">
-        <div class="kicker">Step ${i+1}</div>
-        <h3>${s.name}</h3>
-        <p><b>Action:</b> ${s.action}</p>
-        <p><b>Expected:</b> ${s.expected}</p>
-        <p><b>If it fails:</b> ${s.fail}</p>
-        <div class="checks"><button onclick="mark(this,'PASS')">PASS</button><button class="fail" onclick="mark(this,'FAIL')">FAIL</button><button class="warn" onclick="mark(this,'N/A')">N/A</button></div>
-      </article>`).join("")}
-    <p class="small">Reminder: Site MOPs, drawings, SOO, manufacturer procedures, and authorized direction override general app guidance.</p>
-  `;
+function hideAll() {
+  dashboard.classList.add("hidden");
+  content.classList.add("hidden");
+  flowScreen.classList.add("hidden");
+  reportPanel.classList.add("hidden");
+  jobPanel.classList.add("hidden");
+}
+
+function showDashboard() {
+  hideAll();
+  dashboard.classList.remove("hidden");
+  searchInput.value = "";
+  renderDashboard();
   window.scrollTo(0,0);
 }
 
-function mark(btn,status){
-  [...btn.parentElement.children].forEach(x=>{x.style.opacity=.4; x.textContent=x.textContent.replace(" ✓","")});
-  btn.style.opacity=1; btn.textContent=status+" ✓";
+function renderDashboard(filter="") {
+  dashboard.innerHTML = "";
+  const q = filter.trim().toLowerCase();
+  let keys;
+  if (q) {
+    keys = Object.keys(modules).filter(k => {
+      const m = modules[k];
+      const hay = [m.title,m.summary,...(m.tags||[]),...(m.steps||[]).flatMap(s=>[s.name,s.action,s.expected,s.fail])].join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+  } else {
+    keys = APP_DATA.home.map(x=>x[0]);
+  }
+  if(!keys.length) {
+    dashboard.innerHTML = `<div class="flowCard"><h2>No match</h2><p>Try VFD, SCADA, alarm, NULL, KMC, MOD, or job history.</p></div>`;
+    return;
+  }
+  const grid = document.createElement("section");
+  grid.className = "grid";
+  keys.forEach((k,idx) => {
+    const m = modules[k];
+    const label = q ? m.title : ((APP_DATA.home.find(x=>x[0]===k)||[])[1] || m.title);
+    const b = document.createElement("button");
+    b.className = `appCard ${cardClass(k)}`;
+    b.style.animationDelay = `${Math.min(idx*0.025,.2)}s`;
+    b.innerHTML = `<div class="icon">${icons[k]||"•"}</div><h3>${label}</h3><p>${m.summary}</p>`;
+    b.onclick = () => openModule(k);
+    grid.appendChild(b);
+  });
+  dashboard.appendChild(grid);
 }
 
-document.getElementById("backBtn").onclick=()=>{content.classList.add("hidden");dashboard.classList.remove("hidden")};
-document.getElementById("topBtn").onclick=()=>window.scrollTo(0,0);
-document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openModule(b.dataset.open));
-
-searchInput.oninput=e=>{content.classList.add("hidden");reportPanel.classList.add("hidden");dashboard.classList.remove("hidden");renderDashboard(e.target.value)};
-
-function reports(){return JSON.parse(localStorage.getItem("cimProReports")||"[]")}
-function saveReports(r){localStorage.setItem("cimProReports",JSON.stringify(r))}
-function showReports(){
-  const box=document.getElementById("savedReports");
-  const r=reports();
-  box.innerHTML=r.length?r.map(x=>`<div class="reportItem">${x}</div>`).join(""):"<p>No saved reports yet.</p>";
+function annotationForStep(i) {
+  const classes = ["blue","green","amber","purple"];
+  const labels = ["Verify screen + field.", "Command + feedback should agree.", "Pause if SOO/MOP does not match.", "Good training checkpoint."];
+  return `<div class="annotation ${classes[i % classes.length]}">${labels[i % labels.length]}</div>`;
 }
-document.querySelectorAll("[data-report]").forEach(b=>b.onclick=()=>{dashboard.classList.add("hidden");content.classList.add("hidden");reportPanel.classList.remove("hidden");showReports();window.scrollTo(0,0)});
-document.getElementById("reportBackBtn").onclick=()=>{reportPanel.classList.add("hidden");dashboard.classList.remove("hidden")};
-document.getElementById("saveReport").onclick=()=>{
-  const now=new Date().toLocaleString();
-  const fields=["System","Test","Status","Expected","Actual","Checks","Next"];
-  const vals=[
+
+function openModule(key) {
+  const m = modules[key]; if(!m) return;
+  hideAll();
+  content.classList.remove("hidden");
+  const steps = m.steps || [];
+  const extra = key === "equipment_index" ? `<div class="grid">${(APP_DATA.equipmentKeys||[]).map(k=>`<button class="appCard ${cardClass(k)}" onclick="openModule('${k}')"><div class="icon">${icons[k]||"•"}</div><h3>${modules[k].title}</h3><p>${modules[k].summary}</p></button>`).join("")}</div>` : "";
+  contentBody.innerHTML = `
+    <div class="pageTitle"><span class="bigIcon">${icons[key]||"•"}</span><div><h2>${m.title}</h2><p>${m.summary}</p></div></div>
+    <div class="ownerStamp"><b>Created by O. Upshur</b> • CIM Tech Specialist • V10.0</div>
+    <div class="badges">${(m.tags||[]).slice(0,5).map(t=>`<span class="badge">${t}</span>`).join("")}</div>
+    ${extra}
+    <div class="progressWrap"><div id="moduleProgress" class="progressBar"></div></div>
+    ${steps.map((s,i)=>`
+      <article class="step" data-step>
+        <div class="kicker">Step ${i+1}</div>
+        <h3>${s.name}</h3>
+        ${annotationForStep(i)}
+        <p><b>Action:</b> ${s.action}</p>
+        <p><b>Expected:</b> ${s.expected}</p>
+        <p><b>If it fails:</b> ${s.fail}</p>
+        ${(key.includes("pm") || s.action.startsWith("Copy this")) ? `<div class="copyBox">${s.action.replace("Copy this: ","")}</div><button class="secondary" onclick="copyText(this)">Copy</button>` : ""}
+        <div class="checks">
+          <button class="good" onclick="mark(this,'PASS')">PASS</button>
+          <button class="fail" onclick="mark(this,'FAIL')">FAIL</button>
+          <button class="warn" onclick="mark(this,'N/A')">N/A</button>
+        </div>
+      </article>`).join("")}
+    <p style="font-size:13px;color:#93a4ba">Use site MOPs, drawings, SOO, and authorized direction as final authority.</p>
+  `;
+  updateProgress();
+  window.scrollTo(0,0);
+}
+
+function mark(btn,status) {
+  const row = btn.parentElement;
+  [...row.children].forEach(x=>{x.style.opacity=.45; x.textContent=x.textContent.replace(" ✓","")});
+  btn.style.opacity=1;
+  btn.textContent=status+" ✓";
+  row.closest("[data-step]").dataset.done = "1";
+  updateProgress();
+}
+
+function updateProgress() {
+  const steps = [...document.querySelectorAll("[data-step]")];
+  const bar = document.getElementById("moduleProgress");
+  if(!bar || !steps.length) return;
+  const done = steps.filter(s=>s.dataset.done==="1").length;
+  bar.style.width = `${Math.round(done/steps.length*100)}%`;
+}
+
+async function copyText(btn) {
+  const box = btn.previousElementSibling;
+  await navigator.clipboard.writeText(box.textContent.trim());
+  showToast("Copied");
+}
+
+function openFlow(key) {
+  currentFlow = flows[key]; currentNode = currentFlow?.start;
+  if(!currentFlow) return;
+  hideAll();
+  flowScreen.classList.remove("hidden");
+  renderFlow();
+  window.scrollTo(0,0);
+}
+
+function renderFlow() {
+  const node = currentFlow.nodes[currentNode];
+  if(!node) return;
+  const isAnswer = node.type === "answer";
+  flowBody.innerHTML = `
+    <div class="flowCard">
+      <div class="flowIcon">${currentFlow.icon||"◇"}</div>
+      <h2>${currentFlow.title}</h2>
+      <div class="annotation blue">Answer from field condition.</div>
+      <div class="flowQuestion">${node.text}</div>
+      ${isAnswer ? `<div class="copyBox">${node.text}</div><div class="flowBtns single"><button onclick="copyFlowAnswer()">Copy result</button></div>` :
+      `<div class="flowBtns"><button class="good" onclick="flowNext('${node.yes}')">Yes</button><button class="fail" onclick="flowNext('${node.no}')">No</button></div>`}
+    </div>
+    <div class="flowCard"><h3>Next</h3><p>Save the result as a report or job log entry.</p><div class="buttonRow"><button class="secondary" onclick="openReport()">Report</button><button class="secondary" onclick="openJobs()">Job Log</button></div></div>
+  `;
+}
+
+function flowNext(next) { currentNode = next; renderFlow(); }
+async function copyFlowAnswer() {
+  const text = document.querySelector("#flowBody .copyBox")?.textContent || "";
+  await navigator.clipboard.writeText(text.trim());
+  showToast("Copied");
+}
+document.getElementById("flowRestart").onclick = () => { if(currentFlow) { currentNode = currentFlow.start; renderFlow(); } };
+document.getElementById("flowBack").onclick = showDashboard;
+
+function openReport() {
+  hideAll();
+  reportPanel.classList.remove("hidden");
+  showReports();
+  window.scrollTo(0,0);
+}
+
+function openJobs() {
+  hideAll();
+  jobPanel.classList.remove("hidden");
+  showJobs();
+  window.scrollTo(0,0);
+}
+
+function reports() { return JSON.parse(localStorage.getItem("cimProReportsV11") || "[]"); }
+function saveReports(r) { localStorage.setItem("cimProReportsV11", JSON.stringify(r)); }
+function jobs() { return JSON.parse(localStorage.getItem("cimProJobsV11") || "[]"); }
+function saveJobs(j) { localStorage.setItem("cimProJobsV11", JSON.stringify(j)); }
+
+function showReports() {
+  const r = reports();
+  document.getElementById("savedReports").innerHTML = r.length ? r.map(x=>`<div class="reportItem">${x}</div>`).join("") : "<p>No saved reports yet.</p>";
+}
+
+function showJobs() {
+  const j = jobs();
+  document.getElementById("savedJobs").innerHTML = j.length ? j.map(x=>`<div class="jobItem ${(x.status||'OPEN').split(' ')[0]}">${x.text}</div>`).join("") : "<p>No saved jobs yet.</p>";
+}
+
+document.getElementById("saveReport").onclick = () => {
+  const now = new Date().toLocaleString();
+  const vals = [
     document.getElementById("reportSystem").value,
     document.getElementById("reportTest").value,
     document.getElementById("reportStatus").value,
@@ -1494,7 +2356,7 @@ document.getElementById("saveReport").onclick=()=>{
     document.getElementById("reportChecks").value,
     document.getElementById("reportNext").value
   ];
-  const txt=`Date: ${now}
+  const txt = `Date: ${now}
 System/Equipment: ${vals[0]}
 Test/Issue: ${vals[1]}
 Status: ${vals[2]}
@@ -1502,19 +2364,72 @@ Expected Result: ${vals[3]}
 Actual Result: ${vals[4]}
 Checks Completed: ${vals[5]}
 Next Action/Owner: ${vals[6]}
+
 Prepared by: O. Upshur
 Role: CIM Tech Specialist
-App Version: 6.0`;
-  const r=reports(); r.unshift(txt); saveReports(r); showReports();
+App Version: 11.0`;
+  const r = reports(); r.unshift(txt); saveReports(r); showReports(); showToast("Saved");
 };
-document.getElementById("exportReport").onclick=async()=>{
-  const text=reports().join("\n\n----------------\n\n")||"No reports saved.";
-  if(navigator.share){try{await navigator.share({title:"CIM Pro Field Reports",text})}catch(e){}}
-  else{await navigator.clipboard.writeText(text); alert("Reports copied to clipboard.")}
-};
-document.getElementById("clearReports").onclick=()=>{if(confirm("Clear all saved reports on this device?")){saveReports([]);showReports()}};
 
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;document.getElementById("installBtn").classList.remove("hidden")});
-document.getElementById("installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt(); deferredPrompt=null}};
-if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js")}
+document.getElementById("saveJob").onclick = () => {
+  const now = new Date().toLocaleString();
+  const status = document.getElementById("jobStatus").value;
+  const txt = `Date: ${now}
+Job/Area: ${document.getElementById("jobArea").value}
+Equipment: ${document.getElementById("jobEquipment").value}
+Task Type: ${document.getElementById("jobType").value}
+Status: ${status}
+Notes: ${document.getElementById("jobNotes").value}
+Next Action: ${document.getElementById("jobNext").value}
+
+Prepared by: O. Upshur
+App Version: 11.0`;
+  const j = jobs(); j.unshift({status, text: txt}); saveJobs(j); showJobs(); showToast("Saved");
+};
+
+document.getElementById("exportReport").onclick = async () => {
+  const text = reports().join("\n\n----------------\n\n") || "No reports saved.";
+  if(navigator.share) { try { await navigator.share({title:"CIM Pro V11 Field Reports", text}); } catch(e) {} }
+  else { await navigator.clipboard.writeText(text); showToast("Copied"); }
+};
+document.getElementById("exportJobs").onclick = async () => {
+  const text = jobs().map(j=>j.text).join("\n\n----------------\n\n") || "No jobs saved.";
+  if(navigator.share) { try { await navigator.share({title:"CIM Pro V11 Job History", text}); } catch(e) {} }
+  else { await navigator.clipboard.writeText(text); showToast("Copied"); }
+};
+
+document.getElementById("clearReports").onclick = () => { if(confirm("Clear saved reports?")) { saveReports([]); showReports(); } };
+document.getElementById("clearJobs").onclick = () => { if(confirm("Clear saved jobs?")) { saveJobs([]); showJobs(); } };
+
+document.getElementById("backBtn").onclick = showDashboard;
+document.getElementById("topBtn").onclick = () => window.scrollTo(0,0);
+document.getElementById("reportBackBtn").onclick = showDashboard;
+document.getElementById("jobBackBtn").onclick = showDashboard;
+
+document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openModule(b.dataset.open));
+document.querySelectorAll("[data-flow]").forEach(b=>b.onclick=()=>openFlow(b.dataset.flow));
+document.querySelectorAll("[data-report]").forEach(b=>b.onclick=openReport);
+document.querySelectorAll("[data-jobs]").forEach(b=>b.onclick=openJobs);
+document.querySelectorAll("[data-home]").forEach(b=>b.onclick=showDashboard);
+
+searchInput.addEventListener("input", e => {
+  hideAll(); dashboard.classList.remove("hidden"); renderDashboard(e.target.value);
+});
+
+document.getElementById("startAppBtn").onclick = () => {
+  localStorage.setItem("cimProV11Onboarded","1");
+  onboardingOverlay.classList.add("hidden");
+};
+if(!localStorage.getItem("cimProV11Onboarded")) {
+  onboardingOverlay.classList.remove("hidden");
+}
+
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault(); deferredPrompt = e; document.getElementById("installBtn").classList.remove("hidden");
+});
+document.getElementById("installBtn").onclick = async () => {
+  if(deferredPrompt) { deferredPrompt.prompt(); deferredPrompt=null; }
+};
+if("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js"); }
+
 renderDashboard();
